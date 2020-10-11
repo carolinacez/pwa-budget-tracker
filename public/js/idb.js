@@ -1,11 +1,8 @@
-const indexedDB =
-  window.indexedDB ||
-  window.mozIndexedDB ||
-  window.webkitIndexedDB ||
-  window.msIndexedDB ||
-  window.shimIndexedDB;
+// const { response } = require("express");
+// const { get, ServerResponse } = require("http");
 
-  let db; 
+// const indexedDB = window.
+let db; 
 
 const request = window.indexedDB.open('new_budget', 1);
 
@@ -38,7 +35,7 @@ function uploadBudget() {
     const getAll = budgetObjectStore.getAll();
     getAll.onsuccess = function() {
         if(getAll.result.length > 0) {
-            fetch('/api/transaction/bulk', {
+            fetch('/api/transaction', {
                 method: 'POST',
                 body: JSON.stringify(getAll.result),
                 headers: {
