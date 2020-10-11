@@ -1,8 +1,11 @@
-// const { response } = require("express");
-// const { get, ServerResponse } = require("http");
+const indexedDB =
+  window.indexedDB ||
+  window.mozIndexedDB ||
+  window.webkitIndexedDB ||
+  window.msIndexedDB ||
+  window.shimIndexedDB;
 
-// const indexedDB = window.
-let db; 
+  let db; 
 
 const request = window.indexedDB.open('new_budget', 1);
 
