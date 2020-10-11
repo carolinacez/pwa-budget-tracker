@@ -1,6 +1,11 @@
+const APP_PREFIX = 'budget-tracker-';
+const VERSION = 'v1';
+const CACHE_NAME = APP_PREFIX + VERSION;
+const DATA_CACHE_NAME = 'data-cache-' + VERSION;
 
-const CACHE_NAME = "budget-tracker-1"; 
-const DATA_CACHE_NAME = "data-budget-tracker-1"; 
+
+// const CACHE_NAME = "budget-tracker-1"; 
+// const DATA_CACHE_NAME = "data-budget-tracker-1"; 
 
 const FILES_TO_CACHE = [
     '/',
@@ -30,17 +35,23 @@ self.addEventListener('install', function(e) {
 
 self.addEventListener('activate', function(e) {
     e.waitUntil(
-        caches.keys().then(keyList => {
-            return Promise.all (
-                keyList.map(key => {
-                    if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
-                        return caches.delete(key);
-                    }
-                })
-            )
-        })
-    )
-})
+      caches.keys().then(function(keyList) {
+        let cacheKeeplist = keyList.filter(function(key) {
+          return key.indexOf(APP_PREFIX);
+        });
+        cacheKeeplist.push(CACHE_NAME);
+  
+        return Promise.all(
+          keyList.map(function(key, i) {
+            if (cacheKeeplist.indexOf(key) === -1) {
+              console.log('deleting cache : ' + keyList[i]);
+              return caches.delete(keyList[i]);
+            }
+          })
+        );
+      })
+    );
+  });
 
 self.addEventListener('fetch', function(e) {
     if(e.request.url.includes('/api/')) {
